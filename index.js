@@ -2,6 +2,8 @@
 var fenolicos = [];
 var folhas = [];
 
+var listCompostosComMaisEspecies = [];
+
 $(document).ready(() => {
    getFenolicos();
    especiesComMaisCompostos();
@@ -13,90 +15,91 @@ $(document).ready(() => {
 
 function getDados() {
    return [
-      {nome: "vulgaris", compostos: [3, 7, 8, 11, 13, 15, 18, 20, 21, 26, 30, 31, 33, 39, 40, 43, 45, 46, 49, 51, 52, 55, 56, 58, 68]},
-      {nome: "merostachys", compostos: [3, 4, 11, 12, 13, 19, 25, 26, 27, 28, 29, 30, 35, 36, 38, 48, 51, 52, 55, 58, 60, 63, 65, 67]},
-      {nome: "asper", compostos: [1, 6, 7, 8, 12, 13, 14, 17, 20, 26, 28, 30, 31, 35, 36, 43, 46, 47, 48, 52, 53, 55, 56, 57, 58, 59, 64, 65]},
-      {nome: "japonica", compostos: [3, 8, 10, 11, 13, 14, 15, 17, 19, 20, 21, 22, 25, 27, 28, 30, 31, 32, 35, 36, 37, 39, 40, 41, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 57, 58, 59, 63, 65]},
-      {nome: "chusquea", compostos: [11, 12, 13, 14, 15, 17, 19, 23, 24, 25, 27, 30, 33, 35, 40, 42, 44, 50, 54, 55, 58]},
-      {nome: "trinnil", compostos: [6, 9, 10, 12, 13, 14, 17, 19, 20, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 36, 38, 40, 41, 43, 44, 45, 48, 49, 50, 51, 52, 54, 55, 58, 65, 67]},
-      {nome: "aurea", compostos: [3, 5, 6, 8, 10, 11, 12, 13, 14, 17, 19, 20, 22, 23, 25, 26, 27, 28, 29, 31, 32, 34, 35, 36, 37, 38, 40, 41, 42, 44, 45, 46, 49, 50, 51, 52, 53, 54, 55, 58, 63, 66]},
-      {nome: "latiflorus", compostos: [2, 3, 7, 8, 9, 11, 12, 13, 14, 17, 19, 20, 23, 26, 27, 28, 31, 33, 35, 36, 37, 40, 41, 43, 44, 45, 50, 51, 53, 54, 55, 57, 58, 60, 61, 62, 63, 64, 65]},
-      {nome: "pubences", compostos: [3, 10, 12, 16, 17, 19, 20, 22, 23, 25, 26, 27, 28, 29, 30, 32, 35, 36, 38, 40, 41, 43, 44, 45, 48, 49, 50, 51, 52, 53, 54, 55, 58, 65, 67]},
-      {nome: "pleioblasto", compostos: [8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 21, 22, 24, 25, 28, 29, 31, 32, 36, 37, 39, 40, 41, 42, 44, 46, 47, 49, 51, 52, 54, 55, 58, 59, 63, 65]},
-      {nome: "tuldoides", compostos: [7, 8, 14, 15, 17, 19, 20, 21, 25, 27, 28, 30, 31, 35, 36, 37, 39, 40, 42, 44, 45, 48, 49, 50, 51, 52, 55, 58, 65]}
+      {nome: "Bambusa vulgaris", compostos: [3, 7, 8, 11, 13, 15, 18, 20, 21, 26, 30, 31, 33, 39, 40, 43, 45, 46, 49, 51, 52, 55, 56, 58, 68]},
+      {nome: "Merostachys sp.", compostos: [3, 4, 11, 12, 13, 19, 25, 26, 27, 28, 30, 35, 36, 38, 48, 51, 52, 55, 58, 60, 63, 65, 67]},
+      {nome: "Dendrocalamus asper", compostos: [1, 6, 7, 8, 12, 13, 14, 17, 20, 26, 28, 29, 30, 31, 35, 36, 43, 46, 47, 48, 52, 53, 55, 57, 58, 59, 64, 65]},
+      {nome: "Pseudosasa japonica", compostos: [3, 8, 10, 11, 13, 14, 15, 17, 19, 20, 21, 22, 25, 27, 28, 30, 31, 32, 35, 36, 37, 39, 40, 41, 42, 43, 44, 46, 47, 48, 50, 51, 52, 54, 55, 57, 58, 59, 63, 65]},
+      {nome: "Chusquea sp.", compostos: [11, 12, 13, 14, 15, 17, 19, 23, 24, 25, 27, 30, 33, 35, 40, 42, 44, 50, 54, 55, 58]},
+      {nome: "Guadua trinnil", compostos: [6, 9, 10, 12, 13, 14, 17, 19, 20, 22, 24, 25, 26, 27, 28, 29, 30, 31, 32, 36, 38, 40, 41, 43, 44, 45, 48, 49, 50, 51, 52, 54, 55, 58, 65, 67, 69]},
+      {nome: "Phyllostachys aurea", compostos: [3, 5, 6, 8, 10, 11, 12, 13, 14, 17, 19, 20, 22, 23, 25, 26, 27, 28, 29, 31, 32, 34, 35, 36, 37, 38, 40, 41, 42, 44, 45, 46, 49, 50, 51, 52, 53, 54, 55, 58, 63, 66]},
+      {nome: "Dendrocalamus latiflorus", compostos: [2, 3, 7, 8, 9, 11, 12, 13, 14, 17, 19, 20, 23, 26, 27, 28, 31, 33, 35, 36, 37, 40, 41, 43, 44, 45, 50, 51, 53, 54, 55, 57, 58, 60, 61, 62, 63, 64, 65]},
+      {nome: "Phyllostachys pubences", compostos: [3, 10, 12, 16, 17, 19, 20, 22, 23, 25, 26, 27, 28, 29, 30, 32, 35, 36, 38, 40, 41, 43, 44, 45, 48, 49, 50, 51, 52, 53, 54, 55, 58, 65, 67, 69]},
+      {nome: "Pleioblastus sp.", compostos: [8, 9, 10, 11, 12, 13, 14, 15, 17, 19, 20, 21, 22, 24, 25, 28, 29, 31, 32, 36, 37, 39, 40, 41, 42, 44, 46, 47, 49, 51, 52, 54, 55, 58, 59, 63, 65]},
+      {nome: "Bambusa tuldoides", compostos: [7, 8, 14, 15, 17, 19, 20, 21, 25, 27, 28, 30, 31, 35, 36, 37, 39, 40, 42, 44, 45, 48, 49, 50, 51, 52, 55, 58, 65]}
    ];
 }
 
 function getCompostos() {
    return {
-      1: "Methyl dihydroxybenzoic acid hexoside",
-      2: "Protocatechuic acid 5-O-[apiofuranosyl- (1→6)- glucopyranoside]",
-      3: "Dihydroxybenzoic acid hexoside",
+      1: "Hexoside methyl dihydroxybenzoic acid",
+      2: "5-O-[apiofuranosyl- (1→6)- glucopyranoside] protocatechuic acid",
+      3: "Hexoside dihydroxybenzoic acid",
       4: "Malonyl chlorogenic acid",
       5: "Chlorogenic acid",
-      6: "5-O-Feruloylquinic acid (ferulic)",
-      7: "Coumaric acid pentoside hexoside",
-      8: "Dihydroferulic acid 4-O-glucuronide (ferulic)",
-      9: "O-Hexosyl-C-hexolyl luteolin or isomer",
-      10: "O-Hexosyl-C-hexolyl luteolin or isomer",
-      11: "Luteolin-6-glucoside,8-arabinoside",
-      12: "Apigenin-6,8-di-C-glucoside",
-      13: "Luteolin-6-arabinoside ,8-glucoside",
+      6: "5-O-feruloylquinic acid",
+      7: "Pentoside hexoside coumaric acid",
+      8: "4-O-glucuronide dihydroferulic acid",
+      9: "O-hexosyl-C-hexolyl luteolin or isomer",
+      10: "O-hexosyl-C-hexolyl luteolin or isomer",
+      11: "6-C-glucoside-8-C-arabinoside luteolin",
+      12: "6,8-di-C-glucoside apigenin",
+      13: "6-C-arabinoside-8-C-arabinoside luteolin",
       14: "7-O-glucosyl-6-C-glucosyl apigenin",
       15: "8-C-xylosyl-6-C-glucosyl apigenin",
       16: "Methoxy-trihydroxyflavone-O-glucuronide",
-      17: "4’’-O-Xylosyl-Isoorientin (Luteolin)",
-      18: "Apigenin-6-C-β-Dxyloside-8-C-α-Lrhamnosyl-(1→2)-β-Dglucoside",
-      19: "Apigenina-6-C-glucoside-8-C-arabinoside",
-      20: "Orientin (Luteolin)",
-      21: "2″-O-rhamnosyl isoorientin (Luteolin)",
-      22: "Chrysoeriol C-hexoside O-hexoside",
-      23: "Isoorientin (Luteolin)",
-      24: "Chrysoeriol-6-C-β-Dglucoside- 8-C-α-Larabinoside",
-      25: "Chrysoeriol-6-C-α-Larabinoside- 8-C-β-Dglucoside",
-      26: "Luteolin-6,8-di-C-arabinoside",
-      27: "Apigenina-6-C-arabinoside-7-C-glucoside",
-      28: "2’’-O-Xylosyl-Isovitexin (Apigenin)",
-      29: "Apigenin-6-C-α-Lrhamnosyl-(1→2)-β-Dglucoside-8-C-α-Larabinoside",
-      30: "2’’-O-Rhamnosyl-vitexin (Apigenin)",
-      31: "Apigenin-6,8-di-C-β-D-xyloside",
-      32: "Chrysoeriol-6,8-di-C- β-D-glucoside",
-      33: "Vitexin (Apigenin)",
-      34: "Isorhamnetin-O-(pentosyl)hexoside",
-      35: "Isovitexin (Apigenin)",
-      36: "Apigenin-6-C-β-Dxyloside-8-C-α-Larabinoside",
-      37: "Luteolin C-hexoside O-deoxyhexoside",
-      38: "2’’-O-Rhamnosyl-isovitexin (Apigenin)",
-      39: "Chrysoeriol O-deoxyhexoside-C-hexoside",
+      17: "4’’-O-xylosyl-isoorientin (luteolin)",
+      18: "6-C-β-D-xyloside-8-C-α-L-rhamnosyl-(1→2)-β-D-glucoside apigenin",
+      19: "6-C-glucoside-8-C-arabinoside apigenin",
+      20: "Orientin (8-C-glucoside luteolin)",
+      21: "2″-O-rhamnosyl isoorientin (luteolin)",
+      22: "C-hexoside O-hexoside chrysoeriol",
+      23: "Isoorientin (6-C-glucoside luteolin)",
+      24: "6-C-β-D-glucoside-8-C-α-L-arabinoside chrysoeriol",
+      25: "6-C-α-L-arabinoside-8-C-β-D-glucoside chrysoeriol",
+      26: "6,8-di-C-arabinoside luteolin",
+      27: "6-C-arabinoside-7-O-glucoside apigenin",
+      28: "2’’-O-xylosyl-isovitexin (apigenin)",
+      29: "6-C-α-L-rhamnosyl-(1→2)-β-D-glucoside-8-C-α-L-arabinoside apigenin",
+      30: "2’’-O-rhamnosyl-vitexin (apigenin)",
+      31: "6,8-di-C-β-D-xyloside apigenin",
+      32: "6,8-di-C-β-D-glucoside chrysoeriol",
+      33: "Vitexin (8-C-glucoside apigenin)",
+      34: "O-(pentosyl)hexoside isorhamnetin",
+      35: "Isovitexin (6-C-glucoside apigenin)",
+      36: "6-C-β-D-xyloside-8-C-α-L-arabinoside apigenin",
+      37: "C -hexoside O-deoxyhexoside luteolin",
+      38: "2’’-O-rhamnosyl-isovitexin (apigenin)",
+      39: "O-deoxyhexoside-C-hexoside chrysoeriol",
       40: "7-O-glucosyl luteolin",
       41: "4′-O-glucosyl-6-C-digitoxosyl luteolin",
-      42: "Chrysoeriol-6-glucoside",
-      43: "Apigenin-6,8-di-C-α- L-arabinoside",
+      42: "6-glucoside chrysoeriol",
+      43: "6,8-di-C-α-L-arabinoside apigenin",
       44: "Tangeretin",
-      45: "6’-C-Arabinosyl-Luteolin",
-      46: "Chrysin 6-C-glucoside-8-C-arabinoside",
+      45: "6’-C-arabinosyl luteolin",
+      46: "6-C-glucoside-8-C-arabinoside chrysin ",
       47: "6-C-boivinosyl-7-O-glucosyl apigenin",
-      48: "Apigenin-6-C-α-Larabinoside-8-C-β-Dxyloside",
-      49: "2''-O-Apiosyl-7-O-Glucosyl-Tricin",
+      48: "6-C-α-L-arabinoside-8-C-β-D-xyloside apigenin",
+      49: "2’’-O-apiosyl-7-O-glucosyl tricin",
       50: "7-O-glucosyl apigenin",
-      51: "O-Hexosyl-Deoxyhexosyl-Tricin",
-      52: "Chrysin 6-C- arabinoside -8-C- glucoside",
-      53: "Apigenin-8- C-arabinoside",
+      51: "O-hexosyl-deoxyhexosyl tricin",
+      52: "6-C-arabinoside-8-C-glucoside chrysin",
+      53: "8-C-arabinoside apigenin",
       54: "7-O-glucosyl hispidulin",
-      55: "4'-O-Glucosyl-Tricin",
-      56: "Apigenin-6-C-α-arabinoside-8-C-α-Lrhamnosiyl-(1→2)-D-glucoside",
+      55: "4'-O-glucosyl tricin",
+      56: "6-C-α-L-arabinoside-8-C-α-L-rhamnosiyl-(1→2)-β-D-glucoside apigenin",
       57: "4′-O-guaiacylglyceryl-7-O-glucosyl tricin",
-      58: "7'-O-Glucosyl-Tricin",
-      59: "6-C-boivinosyl-7-O-glucosyl Apigenin or isomer",
+      58: "7'-O-glucosyl tricin",
+      59: "6-C-boivinosyl-7-O-glucosyl apigenin or isomer",
       60: "Dihydroxydimethoxyflavone-hexose-glycuronic acid",
       61: "Luteolin",
       62: "Apigenina",
       63: "Tricin",
-      64: "Naringenin-3-O -glucopyranosyle- rhamnoside",
-      65: "Kaempferol-3-rhamnoside-7-(6'-succinylglucoside)",
-      66: "Quercetin-O-(deoxyhexosyl)hexoside",
-      67: "Limocitrin 3- O-(3-hydroxy3-methylglutarate)-⊎-glucoside",
-      68: "Kaempferol-O-feruloyhexoside",
+      64: "3-O-glucopyranosyle-rhamnoside naringenin",
+      65: "3-rhamnoside-7-(6'-succinylglucoside) kaempferide",
+      66: "O-(deoxyhexosyl)hexoside quercetin",
+      67: "3-O-(3-hydroxy3-methylglutarate)-⊎-glucoside limocitrin",
+      68: "O-feruloyhexoside kaempferol",
+      69: "6-C-glucopyranosyl-7-O-methyl apigenin",
    };
 }
 
@@ -166,11 +169,28 @@ function compostosComMaisEspecies() {
             contemFolhas.push(f.nome);
          }
       });
-      resultado.push({nome: compostos[key], folhas: contemFolhas, num: contemFolhas.length, porcentagem: Math.round((100 * contemFolhas.length) / folhas.length), totalFolhas: folhas.length});
+      resultado.push({
+         nome: compostos[key],
+         folhas: contemFolhas,
+         num: contemFolhas.length,
+         porcentagem: Math.round((100 * contemFolhas.length) / folhas.length),
+         totalFolhas: folhas.length
+      });
    });
-   resultado.sort((a,b) => (a.num > b.num) ? -1 : ((b.num > a.num) ? 1 : 0));
+   resultado.sort((a, b) => (a.num > b.num) ? -1 : ((b.num > a.num) ? 1 : 0));
+   listCompostosComMaisEspecies = resultado;
    // mostra na tela
-   resultado.forEach(r => {
+   compostosComMaisEspeciesTable();
+   console.table("2 - Compostos que apresentam mais espécies", listCompostosComMaisEspecies);
+}
+
+function compostosComMaisEspeciesTable() {
+   $("#resposta_pergunta_2 tbody").empty();
+   var filtro = $("#filtroComposto").val();
+   listCompostosComMaisEspecies.forEach(r => {
+      if (filtro && filtro.length) {
+         if (r.nome.toLowerCase().indexOf(filtro.toLowerCase()) === -1) return;
+      }
       let title = r.folhas.toString().replace(new RegExp(',', 'g'), '\n');
       $("#resposta_pergunta_2 tbody").append(`
          <tr>
@@ -181,7 +201,8 @@ function compostosComMaisEspecies() {
          </tr>
       `);
    });
-   console.table("2 - Compostos que apresentam mais espécies", resultado);
+   var count = $("#resposta_pergunta_2 tr").length - 1;
+   $("#numCompostos").html(`<strong>Total de ${count} composto(s)</strong>`);
 }
 
 // pergunta 3
