@@ -8,7 +8,7 @@ $(document).ready(() => {
    compostosComMaisEspecies();
    similaridade();
    derivadosCompostos();
-   derivadosEspecies();
+   // derivadosEspecies();
 });
 
 function getDados() {
@@ -97,17 +97,17 @@ function getCompostos() {
       66: "4′-O-guaiacylglyceryl-7-O-glucosyl tricin",
       67: "7'-O-glucosyl tricin",
       68: "6-C-boivinosyl-7-O-glucosyl apigenin or isomer",
-      69: "Dihydroxydimethoxyflavone-hexose-glycuronic acid",
+      69: "Dihydroxy-dimethoxyflavone-hexose-glycuronic acid",
       70: "Luteolin",
-      71: "Apigenina",
+      71: "Apigenin",
       72: "Tricin",
       73: "3-O-glucopyranosyle-rhamnoside naringenin",
       74: "Naringenin",
-      75: "Kaempferol-3-glucoside",
+      75: "3-glucoside kaempferol",
       76: "O-(deoxyhexosyl)hexoside quercetin",
       77: "O-(pentosyl)hexoside isorhamnetin",
-      78: "Kaempferol-3-rutinoside",
-      79: "Quercetin-3-glucoside",
+      78: "3-rutinoside kaempferol",
+      79: "3-glucoside quercetin",
       80: "3-O-(3-hydroxy3-methylglutarate)-⊎-glucoside limocitrin",
       81: "O-feruloyhexoside kaempferol"
    };
@@ -131,24 +131,26 @@ function getFenolicos() {
 
 function getDerivados() {
    return [
-      "apigenin",
-      "luteolin",
-      "chrysoeriol",
-      "chrysin",
-      "tricin",
-      "tangeretin",
-      "hispidulin",
-      "isorhamnetin",
-      "flavone",
-      "dihydroxybenzoic acid",
-      "protocatechuic acid",
-      "chlorogenic acid",
-      "ferulic",
-      "coumaric acid",
-      "naringenin",
-      "kaempferol",
-      "quercetin",
-      "limocitrin",
+      {nome: "apigenin", derivados: ["apigenin", "isovitexin", "vitexin"]},
+      {nome: "luteolin", derivados: ["luteolin", "isoorientin", "chrysoeriol", "orientin"]},
+      {nome: "chrysin", derivados: ["chrysin"]},
+      {nome: "tricin", derivados: ["tricin"]},
+      {nome: "tangeretin", derivados: ["tangeretin"]},
+      {nome: "hispidulin", derivados: ["hispidulin"]},
+      {nome: "isorhamnetin", derivados: ["isorhamnetin"]},
+      {nome: "flavone", derivados: ["flavone"]},
+      {nome: "hydroxybenzoic", derivados: ["hydroxybenzoic"]},
+      {nome: "protocatechuic", derivados: ["protocatechuic"]},
+      {nome: "chlorogenic", derivados: ["chlorogenic", "feruloylquinic"]},
+      {nome: "ferulic", derivados: ["ferulic"]},
+      {nome: "coumaric", derivados: ["coumaric"]},
+      {nome: "naringenin", derivados: ["naringenin"]},
+      {nome: "kaempferol", derivados: ["kaempferol"]},
+      {nome: "quercetin", derivados: ["quercetin"]},
+      {nome: "limocitrin", derivados: ["limocitrin"]},
+      {nome: "syringic", derivados: ["syringic"]},
+      {nome: "caffeic", derivados: ["caffeic"]},
+      {nome: "vanillic", derivados: ["vanillic"]},
    ];
 }
 
@@ -250,7 +252,7 @@ function similaridade() {
             <div class="col-9">
                <strong><i>${r.nome} -> ${nomeSimilares}</i></strong>
                <div style=" margin-top: -7px;">
-                  <small>(<i>${nomeSimilares}</i> possui ${r.maiorSimilaridade[0].num} dos ${r.total} compostos de <i>${r.nome}</i>)</small>
+                  <small>(<i>${nomeSimilares}</i>, It contains ${r.maiorSimilaridade[0].num} out of the ${r.total} compounds of <i>${r.nome}</i>)</small>
                </div>
             </div>
          </div>
@@ -263,10 +265,21 @@ function similaridade() {
 // pergunta 4
 function derivadosCompostos() {
    let derivados = getDerivados();
+   let compostos = getCompostos();
+   let compostosIds = Object.keys(compostos);
    let resultado = [];
    derivados.forEach(d => {
-      let compostos = Object.values(getCompostos()).filter(c => c.toLowerCase().includes(d.toLowerCase()));
-      resultado.push({derivado: d, num: compostos.length, compostos: compostos});
+      let ids = {};
+      compostosIds.forEach(id => {
+         const nomeComposto = compostos[id];
+         d.derivados.forEach(nome => {
+            if (nomeComposto.toLowerCase().includes(nome.toLowerCase())) {
+               ids[id] = true;
+            }
+         });
+      });
+      let compostosDerivados = Object.keys(ids).map(id => compostos[id]);
+      resultado.push({derivado: d.nome, num: compostosDerivados.length, compostos: compostosDerivados});
    });
    resultado.sort((a,b) => (a.num > b.num) ? -1 : ((b.num > a.num) ? 1 : 0));
    resultado.forEach(r => {
@@ -284,6 +297,7 @@ function derivadosCompostos() {
 }
 
 // pergunta 5
+/*
 function derivadosEspecies() {
    let derivados = getDerivados();
    let resultados = [];
@@ -320,6 +334,7 @@ function derivadosEspecies() {
 
    console.log("5 - Derivados dos compostos que mais aparecem por espécie", resultados);
 }
+*/
 
 
 
